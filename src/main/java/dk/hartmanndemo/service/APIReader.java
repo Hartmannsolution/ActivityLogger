@@ -15,8 +15,7 @@ import java.net.http.HttpResponse;
 
 /**
  * Purpose:
- *
- * @author: Thomas Hartmann
+ * author: Thomas Hartmann
  */
 public class APIReader {
     private static final String WHEATHERURL = "https://vejr.eu/api.php?location=Roskilde&degree=C";
@@ -36,6 +35,13 @@ public class APIReader {
         System.out.println("-------------------------------------------------");
         CityInfoDTO cityInfoDTO = instance.getCityData();
         System.out.println(cityInfoDTO);
+        System.out.println("##########################################################################");
+        System.out.println("------------------Using a generic converter-------------------------------");
+        WeatherDTO weatherDTO2 = instance.getAndConvertData(WHEATHERURL, WeatherDTO.class);
+        System.out.println(weatherDTO2);
+        CityInfoDTO cityInfoDTO2 = instance.getAndConvertData(CITYURL, CityInfoDTO[].class)[0];
+        System.out.println(cityInfoDTO2);
+
     }
 
     public WeatherDTO getWeatherData(){
@@ -44,7 +50,6 @@ public class APIReader {
             ObjectMapper objectMapper = new ObjectMapper();
             return objectMapper.readValue(response, WeatherDTO.class);
         } catch (JsonProcessingException ex){
-            ex.printStackTrace();
             throw new IllegalArgumentException("Could not convert data to WeatherDTO. Try again later");
         }
     }
@@ -54,7 +59,6 @@ public class APIReader {
             ObjectMapper objectMapper = new ObjectMapper();
             return objectMapper.readValue(response, CityInfoDTO[].class)[0];
         } catch (JsonProcessingException ex){
-            ex.printStackTrace();
             throw new IllegalArgumentException("Could not convert data to CityInfoDTO. Try again later");
         }
     }
@@ -65,35 +69,40 @@ public class APIReader {
             JsonNode node = objectMapper.readTree(new URI(url).toURL());
             return node.toPrettyString();
         } catch (URISyntaxException | IOException ex){
-            ex.printStackTrace();
             throw new IllegalArgumentException("Could not retrieve data from the provided URL. Try again later");
         }
     }
+    private <T> T getAndConvertData(String url, Class<T> tClass){
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode node = objectMapper.readTree(new URI(url).toURL());
+            return objectMapper.treeToValue(node, tClass);
+        } catch (URISyntaxException | IOException ex){
+            throw new IllegalArgumentException("Could not retrieve data from the provided URL. Try again later");
+        }
+    }
+
+
     public String getDataWithClient(String url){
 
         try {
-            // Create an HttpClient instance
             HttpClient client = HttpClient.newHttpClient();
 
-            // Create a request
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(url))
                     .GET()
+                    .version(HttpClient.Version.HTTP_1_1)
                     .build();
 
-            // Send the request and get the response
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            // Check the status code and print the response
             if (response.statusCode() == 200) {
-//                System.out.println(response.body());
                 return response.body();
             }
             System.out.println("GET request failed. Status code: " + response.statusCode());
             throw new IllegalArgumentException("Could not retrieve data from the provided URL. Try again later");
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("An error occurred while trying to retrieve data. Try again later");
         }
-        return null;
     }
 }

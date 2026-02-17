@@ -9,7 +9,7 @@ import java.time.LocalTime;
 /**
  * Purpose:
  *
- * @author: Thomas Hartmann
+ * author: Thomas Hartmann
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)

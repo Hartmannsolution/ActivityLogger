@@ -1,14 +1,13 @@
 package dk.hartmanndemo.dtos;
 
-/**
- * Purpose:
- *
- * @author: Thomas Hartmann
- */
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+/**
+ * Purpose:
+ * author: Thomas Hartmann
+ */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WeatherDTO {

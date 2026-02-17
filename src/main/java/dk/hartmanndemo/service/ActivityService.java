@@ -8,8 +8,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * Purpose:
- *
- * @author: Thomas Hartmann
+ * author: Thomas Hartmann
  */
 public class ActivityService {
     public ActivityDTO createActivity(LocalDate date, ActivityDTO.ExerciseType type, LocalTime timeOfDay, int duration, int distance, String comment){

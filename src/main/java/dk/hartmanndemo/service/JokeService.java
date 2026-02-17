@@ -11,8 +11,7 @@ import java.util.Scanner;
 
 /**
  * Purpose:
- *
- * @author: Thomas Hartmann
+ * author: Thomas Hartmann
  */
 public class JokeService {
     private static final String CHUCK_URL = "https://api.chucknorris.io/jokes/random";
