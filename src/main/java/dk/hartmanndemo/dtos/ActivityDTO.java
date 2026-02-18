@@ -2,6 +2,7 @@ package dk.hartmanndemo.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dk.hartmanndemo.persistence.ExerciseType;
 import lombok.Data;
 
 import java.time.LocalTime;
@@ -14,6 +15,7 @@ import java.time.LocalTime;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ActivityDTO {
+    private Long id;
     private String exerciseDate;
     private ExerciseType exerciseType;
     private LocalTime timeOfDay;
@@ -29,10 +31,17 @@ public class ActivityDTO {
         this.distance = distance;
         this.comment = comment;
     }
+    public ActivityDTO(Long id, String exerciseDate, ExerciseType exerciseType, LocalTime timeOfDay, int duration, double distance, String comment) {
+        this.id = id;
+        this.exerciseDate = exerciseDate;
+        this.exerciseType = exerciseType;
+        this.timeOfDay = timeOfDay;
+        this.duration = duration;
+        this.distance = distance;
+        this.comment = comment;
+    }
     private CityInfoDTO cityInfoDTO;
     private WeatherDTO weatherDTO;
 
-    public static enum ExerciseType {
-        RUN, BIKE, SWIM
-    }
+
 }
